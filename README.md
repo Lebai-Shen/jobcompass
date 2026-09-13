@@ -1,56 +1,90 @@
-# JobCompass（求职指南针）
+# JobCompass 求职指南针
 
-> 一个面向「想进入目标岗位的求职者」的 AI 求职助手。
+一个面向在校求职者的 AI 成长路径工具。用户输入目标岗位，系统输出岗位要求拆解、分阶段学习路径、真实面经和课程推荐。
 
-求职者输入一个目标岗位（例如「AI 产品经理」），系统结合整理后的公开求职内容，自动生成一条**可执行的学习成长路径 + 面经题库 + 教程推荐**。
+![首页](demo/v4-home.png)
 
-## 项目目标
+## 功能
 
-这是一个个人成长的「从零到一」产品项目，既是 AI 产品经理求职作品集，也想真的跑出一个能用的最小可行产品（MVP）。
+- 岗位要求拆解：技能分必会和加分，并给出达标标准
+- 分阶段学习路径：每个阶段包含任务、交付物和验收标准，可打勾跟踪进度
+- 面经题库：按岗位、公司、年份筛选，题目标注来源与可信度
+- 知识库：产品与技术术语解释，支持分类筛选和关键词搜索
+- 资料库：按技能分类的课程与教程
+- 我的计划：保存生成的成长路径，随时回来继续
+- AI 生成：接入 DeepSeek，按岗位实时生成完整路径
 
-## 你会在这里练到的能力
+## 权限设计
 
-- **产品**：用户调研、竞品分析、产品定位、PRD 撰写、流程图、原型设计、指标设计
-- **AI / Agent**：Prompt 工程、RAG 检索增强、多步 Agent 工作流、模型选型与成本、输出质量评估
-- **全栈 / Vibe Coding**：前后端、数据库、爬虫、DeepSeek API 接入、部署，用 AI 协作写代码
+| 身份 | 可用范围 |
+| --- | --- |
+| 访客 | 输入岗位、生成路径、查看岗位要求与学习路径、查看课程、1 条面经 |
+| 登录 | 保存路径、进度同步、我的计划、更多面经 |
+| 会员 | 全部面经、标准答题思路、来源链接、按公司年份筛选、导出 |
 
-## 项目阶段
+## 技术栈
 
-0. 定义与调研（产品定位 / 用户画像 / 竞品分析 / 用户访谈）
-1. PRD 与原型（PRD / 信息架构 / 流程图 / 低保真原型）
-2. 技术 MVP（前后端骨架 / 数据库 / 跑通主流程）
-3. AI 核心能力（DeepSeek + RAG + 学习路径 / 面经库 / 课程推荐）
-4. 打磨与作品化（试用 / 评测 / 复盘 / 包装成作品集）
+- 前端：单文件网页（HTML、CSS、原生 JavaScript）
+- 后端：FastAPI
+- 数据库：SQLite
+- AI：DeepSeek，结构化 JSON 输出
 
 ## 目录结构
 
 ```
-docs/                     # 产品文档
- 01_产品定义与MVP范围.md
- 02_竞品分析框架与清单.md
- 03_竞品分析报告.md
- 04_用户调研与画像.md
-PRD-JobCompass.md         # 产品需求文档
-demo/
- jobcompass-prototype.html # 前端原型（单文件，双击可看）
-backend/                  # 后端：FastAPI + SQLite
- main.py                  # 接口和页面托管
- schema.sql               # 数据库表结构
- seed_data.py             # 初始数据
- run.py                   # 启动入口
-frontend/                 # Next.js 版本的前端（暂未启用）
+demo/                  前端原型，单文件，双击即可打开
+backend/               后端服务与数据库
+docs/                  产品文档
+PRD-JobCompass.md      产品需求文档
 ```
 
-## 怎么跑起来
+## 本地运行
 
-启后端（会自动建库、写数据、托管前端）：
+需要 Python 3.10 或以上。
 
-```
+```bash
+pip install -r backend/requirements.txt
 python backend/run.py
 ```
 
 然后打开 http://127.0.0.1:8000
 
-也可以直接双击 `demo/jobcompass-prototype.html`，这时用的是页面自带的数据，不需要后端。
+不启动后端也可以直接看界面：双击 `demo/jobcompass-prototype.html`，页面会使用内置数据。
 
-> 注：每个阶段的文档都会用大白话解释「为什么这么做」，方便你边做边学。
+## 配置 AI
+
+在 `backend/` 下创建 `.env` 文件，写入：
+
+```
+DEEPSEEK_API_KEY=sk-xxxx
+```
+
+没有配置时会自动回退到内置数据，功能不受影响。
+
+## 接口
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | /api/bootstrap | 获取前端所需的全部数据 |
+| GET | /api/roles | 岗位列表 |
+| GET | /api/roles/{id} | 岗位详情 |
+| GET | /api/interviews | 面经列表，支持岗位、公司、年份、关键词筛选 |
+| GET | /api/courses | 课程列表，支持分类与关键词筛选 |
+| GET | /api/terms | 术语列表，支持分类与关键词筛选 |
+| GET | /api/plans | 已保存的学习计划 |
+| POST | /api/plans | 保存或更新计划 |
+| DELETE | /api/plans/{id} | 删除计划 |
+| GET | /api/ai/status | AI 配置状态 |
+| POST | /api/generate | 按岗位生成成长路径 |
+
+## 数据库
+
+SQLite，文件位于 `backend/data/jobcompass.db`，首次启动时自动建表并写入初始数据。
+
+表结构见 `backend/schema.sql`，初始内容见 `backend/seed_data.py`。
+
+重置数据：
+
+```bash
+python backend/reset_db.py
+```
