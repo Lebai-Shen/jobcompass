@@ -1,0 +1,24 @@
+# 依赖和构建产物
+node_modules/
+__pycache__/
+*.pyc
+.next/
+package-lock.json
+
+# 数据库和临时文件
+backend/data/*.db
+.docbuild/
+.render_qa/
+
+# 密钥和本地配置
+.env
+backend/.env
+
+# 本地工具和临时下载
+.codex/
+.vendor/
+.edge*/
+
+# 系统文件
+.DS_Store
+Thumbs.db

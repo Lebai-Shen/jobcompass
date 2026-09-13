@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JobCompass 求职指南针</title>
+<style>
+  :root {
+    --red: #B4232A;
+    --red-deep: #8E1A20;
+    --red-tint: #FBF4F4;
+    --red-line: #EED9DB;
+    --ink: #1A1A1A;
+    --ink-2: #3F3F46;
+    --muted: #737373;
+    --muted-2: #A3A3A3;
+    --line: #E7E5E4;
+    --line-2: #D6D3D1;
+    --bg: #F5F5F4;
+    --surface: #FFFFFF;
+    --surface-2: #FAFAFA;
+    --shadow: 0 1px 2px rgba(24, 24, 27, 0.04), 0 10px 30px -22px rgba(24, 24, 27, 0.35);
+    --r-lg: 16px;
+    --r-md: 12px;
+    --r-sm: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  a { text-decoration: none; }
+  svg { display: block; }
+
+  /* ---------- 顶部导航 ---------- */
+  .nav { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 26px; }
+  .logo { display: flex; align-items: center; gap: 10px; flex: none; }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--red); color: #fff;
+    display: grid; place-items: center; font-size: 12px; font-weight: 800; letter-spacing: .3px;
+  }
+  .logo-name { font-size: 13.5px; font-weight: 700; line-height: 1.2; letter-spacing: .2px; }
+  .logo-sub { font-size: 10.5px; color: var(--muted-2); letter-spacing: .3px; }
+  .nav-links { display: flex; align-items: center; gap: 2px; overflow-x: auto; }
+  .nav-link { background: transparent; color: var(--muted); font-size: 13.5px; font-weight: 600; padding: 9px 14px; border-radius: var(--r-sm); white-space: nowrap; }
+  .nav-link:hover { background: var(--bg); color: var(--ink); }
+  .nav-link.on { background: var(--bg); color: var(--ink); }
+  .nav-spacer { flex: 1; }
+  .nav-right { display: flex; align-items: center; gap: 8px; flex: none; }
+  .member-pill { font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: var(--red-tint); color: var(--red); border: 1px solid var(--red-line); }
+
+  .btn-primary { background: var(--red); color: #fff; font-size: 14px; font-weight: 700; border-radius: var(--r-md); padding: 12px 22px; white-space: nowrap; }
+  .btn-primary:hover { background: var(--red-deep); }
+  .btn-primary.sm { font-size: 13px; padding: 9px 15px; border-radius: var(--r-sm); }
+  .btn-ghost { background: var(--surface); border: 1px solid var(--line-2); color: var(--ink-2); font-size: 12.5px; font-weight: 600; border-radius: var(--r-sm); padding: 8px 15px; }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+  .btn-dark { background: var(--ink); color: #fff; font-size: 14px; font-weight: 700; border-radius: var(--r-md); padding: 12px 22px; }
+  .btn-dark:hover { background: #000; }
+  .btn-lock { background: var(--red); color: #fff; font-size: 12.5px; font-weight: 700; border-radius: var(--r-sm); padding: 10px 18px; }
+  .btn-lock:hover { background: var(--red-deep); }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 36px 20px 96px; }
+
+  .hero { text-align: center; }
+  .eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 1.6px; color: var(--red); text-transform: uppercase; }
+  h1 { font-size: 36px; line-height: 1.34; margin: 14px 0 14px; letter-spacing: -0.8px; font-weight: 800; }
+  h1 .hl { color: var(--red); }
+  .sub { color: var(--muted); font-size: 14px; line-height: 1.8; max-width: 560px; margin: 0 auto; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 26px; box-shadow: var(--shadow); }
+  .mt24 { margin-top: 22px; }
+  .field { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 8px; letter-spacing: .2px; }
+  .row { display: flex; gap: 10px; }
+  input.text { flex: 1; border: 1px solid var(--line-2); background: var(--surface); border-radius: var(--r-md); padding: 13px 15px; font-size: 14px; font-family: inherit; outline: none; color: var(--ink); }
+  input.text::placeholder { color: var(--muted-2); }
+  input.text:focus { border-color: var(--ink); }
+  select.sel { border: 1px solid var(--line-2); background: var(--surface); border-radius: var(--r-sm); padding: 9px 11px; font-size: 12.5px; font-family: inherit; color: var(--ink-2); outline: none; }
+  select.sel:focus { border-color: var(--ink); }
+  .label-row { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 8px; }
+  .label-mini { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .more-link { background: none; color: var(--red); font-size: 12px; font-weight: 700; padding: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { background: var(--surface); color: var(--ink-2); font-size: 12px; font-weight: 600; border-radius: 999px; padding: 7px 13px; border: 1px solid var(--line-2); }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip.outline { background: var(--surface); border-color: var(--line-2); color: var(--ink-2); }
+  .chip.outline.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+  .feature .num { font-size: 12px; font-weight: 800; letter-spacing: 1.2px; color: var(--red); }
+  .feature h3 { font-size: 14px; margin: 10px 0 6px; }
+  .feature p { font-size: 12px; line-height: 1.7; color: var(--muted); margin: 0; }
+  .banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--ink); color: #fff; border-radius: var(--r-lg); padding: 22px 24px; margin-top: 22px; }
+  .banner h3 { margin: 0 0 6px; font-size: 14.5px; }
+  .banner p { margin: 0; font-size: 12px; line-height: 1.7; color: #A1A1AA; }
+  .banner .tag { background: rgba(180, 35, 42, 0.9); font-size: 11.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
+
+  .loading { max-width: 540px; margin: 44px auto 0; text-align: center; }
+  .loading .mark { width: 44px; height: 44px; border-radius: 12px; background: var(--red-tint); border: 1px solid var(--red-line); color: var(--red); display: grid; place-items: center; margin: 0 auto; font-size: 13px; font-weight: 800; }
+  .bar { height: 6px; border-radius: 999px; background: var(--bg); overflow: hidden; margin-top: 22px; border: 1px solid var(--line); }
+  .bar > i { display: block; height: 100%; background: var(--red); border-radius: 999px; transition: width .5s ease; }
+  .bar.dark > i { background: var(--ink); }
+  .steps { list-style: none; padding: 0; margin: 22px 0 0; text-align: left; }
+  .steps li { display: flex; align-items: center; gap: 12px; font-size: 13px; margin-bottom: 12px; color: var(--muted-2); }
+  .steps li.on { color: var(--ink); }
+  .steps .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); color: var(--muted-2); display: grid; place-items: center; font-size: 10.5px; font-weight: 700; flex: none; border: 1px solid var(--line); }
+  .steps li.on .dot { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .rhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .role { display: flex; gap: 14px; }
+  .avatar { width: 46px; height: 46px; border-radius: var(--r-md); background: var(--bg); border: 1px solid var(--line); color: var(--ink); display: grid; place-items: center; font-size: 14px; font-weight: 800; letter-spacing: .5px; flex: none; }
+  .role h2 { margin: 2px 0 5px; font-size: 20px; letter-spacing: -.3px; }
+  .role .tl { font-size: 12px; color: var(--muted); }
+  .summary { font-size: 13.5px; line-height: 1.85; color: var(--ink-2); margin: 16px 0 0; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .stat { border-radius: var(--r-md); padding: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+  .stat b { display: block; font-size: 20px; letter-spacing: -.5px; }
+  .stat span { font-size: 11.5px; color: var(--muted); }
+  .stat.accent b { color: var(--red); }
+  .actionbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .actionbar p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .subtabs { display: flex; gap: 4px; overflow-x: auto; background: var(--surface); padding: 6px; border-radius: var(--r-md); margin-top: 16px; border: 1px solid var(--line); }
+  .subtab { background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; border-radius: var(--r-sm); padding: 9px 15px; white-space: nowrap; }
+  .subtab:hover { background: var(--bg); color: var(--ink); }
+  .subtab.on { background: var(--ink); color: #fff; }
+  .panel { margin-top: 16px; display: grid; gap: 12px; }
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; }
+  .box h3 { font-size: 13.5px; margin: 0 0 14px; letter-spacing: .2px; }
+  .tag-chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 999px; margin: 0 8px 8px 0; border: 1px solid var(--line-2); color: var(--ink-2); background: var(--surface); }
+  .tag-chip.solid { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .tag-chip.n { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
+  .std { list-style: none; padding: 0; margin: 0; }
+  .std li { display: flex; gap: 11px; font-size: 13.5px; line-height: 1.75; color: var(--ink-2); margin-bottom: 12px; }
+  .std .ok { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--ink); color: var(--ink); font-size: 9px; font-weight: 800; display: grid; place-items: center; flex: none; margin-top: 3px; }
+  .progress-head { display: flex; align-items: center; justify-content: space-between; }
+  .progress-head b { font-size: 13.5px; }
+  .progress-head span { font-size: 12px; font-weight: 700; color: var(--red); }
+  .stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; }
+  .stage .shead { display: flex; align-items: center; gap: 12px; }
+  .stage .num { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 800; display: grid; place-items: center; flex: none; }
+  .stage .shead h3 { margin: 0; font-size: 14px; }
+  .stage .shead p { margin: 3px 0 0; font-size: 11.5px; color: var(--muted); }
+  .tasks { list-style: none; padding: 0; margin: 16px 0 0; }
+  .task { display: flex; gap: 11px; align-items: flex-start; width: 100%; text-align: left; background: transparent; border-radius: var(--r-sm); padding: 9px 10px; }
+  .task:hover { background: var(--bg); }
+  .task .cb { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--line-2); background: var(--surface); display: grid; place-items: center; font-size: 10px; font-weight: 800; color: transparent; flex: none; margin-top: 2px; }
+  .task.on .cb { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .task span.t { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
+  .task.on span.t { color: var(--muted-2); text-decoration: line-through; }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .duo .cell { border-radius: var(--r-md); padding: 13px; background: var(--surface-2); border: 1px solid var(--line); }
+  .duo .cell p.label { margin: 0 0 5px; font-size: 11.5px; font-weight: 700; color: var(--ink); }
+  .duo .cell.accent { background: var(--red-tint); border-color: var(--red-line); }
+  .duo .cell.accent p.label { color: var(--red); }
+  .duo .cell p.val { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--ink-2); }
+  .res-links { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .res-links a { font-size: 12px; font-weight: 600; color: var(--ink-2); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 13px; }
+  .res-links a:hover { border-color: var(--ink); }
+
+  .q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+  .q .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .cred { font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--muted); }
+  .cred.high { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .cred.medium { background: var(--surface-2); color: var(--ink-2); border-color: var(--line-2); }
+  .cred.ai { background: var(--surface); color: var(--muted-2); border-color: var(--line); }
+  .q .meta .src { margin-left: auto; font-size: 11px; color: var(--muted-2); }
+  .q h3 { font-size: 14px; line-height: 1.6; margin: 12px 0 0; }
+  .q .toggle { background: none; color: var(--red); font-size: 12px; font-weight: 700; padding: 10px 0 0; }
+  .q .answer { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 15px; font-size: 12.5px; line-height: 1.75; color: var(--ink-2); margin-top: 10px; }
+  .locked-wrap { position: relative; border-radius: var(--r-lg); overflow: hidden; }
+  .locked-blur { filter: blur(5px); opacity: .5; pointer-events: none; user-select: none; }
+  .lock-badge { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(245,245,244,.35), rgba(245,245,244,.96)); }
+  .lock-inner { text-align: center; padding: 18px; }
+  .lock-inner .lk { width: 40px; height: 40px; border-radius: 12px; background: var(--red-tint); border: 1px solid var(--red-line); color: var(--red); display: grid; place-items: center; margin: 0 auto; }
+  .lock-inner h4 { margin: 10px 0 4px; font-size: 14px; }
+  .lock-inner p { margin: 0 0 12px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .note { background: var(--surface-2); border: 1px solid var(--line); color: var(--ink-2); font-size: 12.5px; line-height: 1.7; border-radius: var(--r-md); padding: 16px; }
+  .course { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; color: inherit; }
+  .course:hover { border-color: var(--line-2); box-shadow: var(--shadow); }
+  .course .chead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .course h3 { font-size: 14px; margin: 0; }
+  .course .plat { font-size: 11px; font-weight: 700; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 999px; padding: 5px 10px; white-space: nowrap; }
+  .course p { font-size: 12.5px; line-height: 1.7; color: var(--muted); margin: 8px 0 0; }
+  .course .lvl { font-size: 11px; color: var(--muted-2); margin-top: 10px; }
+  .save-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .save-row p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .saved-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .si-left { display: flex; align-items: center; gap: 12px; }
+  .si-avatar { width: 40px; height: 40px; border-radius: var(--r-sm); background: var(--bg); border: 1px solid var(--line); color: var(--ink); display: grid; place-items: center; font-size: 12.5px; font-weight: 800; flex: none; }
+  .saved-item h3 { margin: 0 0 4px; font-size: 14px; }
+  .saved-item p { margin: 0; font-size: 12px; color: var(--muted); }
+  .empty { text-align: center; padding: 46px 20px; }
+  .empty h3 { margin: 12px 0 6px; font-size: 15px; }
+  .empty p { margin: 0 0 18px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; }
+  .filters .lbl { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .term-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .term-head h3 { margin: 0; }
+  .term-def { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-2); }
+  .term-eg { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .term-related { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+
+  .overlay { position: fixed; inset: 0; background: rgba(24, 24, 27, 0.5); display: grid; place-items: center; z-index: 100; padding: 20px; }
+  .modal { background: var(--surface); border-radius: var(--r-lg); padding: 28px; max-width: 380px; width: 100%; text-align: center; border: 1px solid var(--line); }
+  .modal h3 { margin: 0 0 8px; font-size: 16.5px; }
+  .modal p { margin: 0 0 18px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .modal .btn-primary { width: 100%; margin-bottom: 10px; }
+  .modal .cancel { background: none; color: var(--muted); font-size: 12.5px; font-weight: 600; }
+
+  @media (max-width: 780px) {
+    h1 { font-size: 27px; }
+    .grid3 { grid-template-columns: 1fr; }
+    .duo { grid-template-columns: 1fr; }
+    .row { flex-direction: column; }
+    .banner { flex-direction: column; align-items: flex-start; }
+    .nav-inner { gap: 12px; }
+    .nav-right .btn-primary { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo">
+      <span class="logo-mark">JC</span>
+      <div>
+        <div class="logo-name">JobCompass</div>
+        <div class="logo-sub">求职指南针</div>
+      </div>
+    </div>
+    <nav class="nav-links" id="navLinks"></nav>
+    <span class="nav-spacer"></span>
+    <div class="nav-right" id="navRight"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main id="app"></main>
+</div>
+<div id="modalRoot"></div>
+
+<script>
+const ICON = {
+  lock: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+};
+
+const ROLES = {
+  pm: {
+    id: "pm", name: "产品经理", mark: "PM", tagline: "把用户的真实问题翻译成产品方案的人",
+    summary: "产品经理负责发现用户问题、定义产品方案，并推动研发把方案做出来。实习岗最看重三件事：会不会写 PRD、能不能画原型讲交互、有没有一个能讲清楚的完整项目。",
+    skills: {
+      required: ["需求分析与用户调研", "PRD 撰写", "原型设计（Figma / Axure）", "竞品分析", "基础数据分析"],
+      bonus: ["SQL", "A/B 测试", "AI 工具与 Prompt", "完整项目经历"],
+      standards: [
+        "能独立写一份合格 PRD，包含背景、目标、用户故事、功能清单和流程图。",
+        "能用 Figma 画低保真原型，并讲清楚每个交互为什么这么设计。",
+        "能对一个竞品说清它的优劣势，以及可以借鉴和应该避开的地方。"
+      ]
+    },
+    stages: [
+      { title: "第 1 周：搞清楚这个岗位到底做什么", duration: "约 1 周",
+        tasks: ["搞清楚产品经理每天的工作内容", "拆解 3 份真实的产品经理 JD", "弄明白需求评审会、发版这些真实工作流程"],
+        deliverable: "一份《岗位理解笔记》加 3 份 JD 拆解",
+        standard: "能用自己的话讲清楚产品经理的工作流程，知道面试会问什么。",
+        resources: [{ name: "B站搜索：产品经理入门", url: "https://search.bilibili.com/all?keyword=%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%20%E5%85%A5%E9%97%A8" }] },
+      { title: "第 2 到 3 周：练三个核心技能", duration: "约 2 周",
+        tasks: ["学 Figma 画原型", "照着模板写 1 份 PRD", "做 1 份竞品分析"],
+        deliverable: "1 份 PRD 加 1 份竞品分析加 1 个原型",
+        standard: "PRD 要素齐全，原型能讲清交互，竞品分析有明确结论。",
+        resources: [
+          { name: "B站搜索：Figma 入门", url: "https://search.bilibili.com/all?keyword=Figma%20%E5%85%A5%E9%97%A8" },
+          { name: "B站搜索：PRD 怎么写", url: "https://search.bilibili.com/all?keyword=PRD%20%E6%80%8E%E4%B9%88%E5%86%99" }
+        ] },
+      { title: "第 3 到 5 周：做一个完整项目", duration: "约 2 周",
+        tasks: ["选一个你身边真实的小问题", "用 vibe coding 做一个能演示的 demo", "整理成作品集"],
+        deliverable: "一个完整项目：产品文档加原型加可演示 demo",
+        standard: "能在 5 分钟内讲清楚项目背景、你的方案和最终结果。",
+        resources: [{ name: "B站搜索：产品经理项目实战", url: "https://search.bilibili.com/all?keyword=%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%20%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98" }] },
+      { title: "第 5 到 6 周：准备面试", duration: "约 1 周",
+        tasks: ["刷高频面经", "整理项目话术和常见八股", "做 2 次模拟面试"],
+        deliverable: "面经题库加自我介绍加项目话术",
+        standard: "高频问题能答上来，自己的项目经得起追问。",
+        resources: [{ name: "B站搜索：产品经理面试", url: "https://search.bilibili.com/all?keyword=%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%20%E9%9D%A2%E8%AF%95" }] }
+    ],
+    interviews: [
+      { q: "你怎么理解产品经理这个岗位？", tags: ["高频", "概念题"], source: "牛客社区面经", cred: "high",
+        a: "分三层答：发现用户问题（调研）、定义产品方案（PRD 和原型）、推动方案落地（和研发协作）。最后用一句话说明你为什么想做，最好结合你做过的一件事。" },
+      { q: "挑一个你常用的 App，如果让你加一个功能，你会怎么做？", tags: ["高频", "案例分析"], source: "大厂真题", cred: "high",
+        a: "先定位目标用户和使用场景，再找到具体问题，然后给方案，最后说清楚怎么验证效果。不要一上来就报一个功能名字。" },
+      { q: "竞品分析你会怎么做？", tags: ["高频", "技能题"], source: "牛客社区面经", cred: "medium",
+        a: "先把竞品分类：直接竞品、间接竞品、替代方案。再定维度：定位、目标用户、核心功能、体验、商业模式。最后一定要给结论，我们能学什么、要避开什么。" },
+      { q: "你怎么判断一个需求该不该做？", tags: ["进阶"], source: "大厂真题", cred: "high",
+        a: "看三件事：用户价值、业务价值、实现成本。再排优先级，可以用 RICE 或 KANO 模型，说清楚你的判断依据。" },
+      { q: "你是怎么开始学产品经理的？", tags: ["面试常见"], source: "AI 整理", cred: "ai",
+        a: "讲你从迷茫到做出项目的真实过程。重点说你做了什么、遇到什么困难、怎么解决。这个项目本身就是你最好的答案。" }
+    ],
+    courses: [
+      { title: "Figma 零基础入门", category: "原型设计", platform: "B站", level: "入门", why: "原型是产品经理的基本功，面试一定会让你讲交互。" },
+      { title: "PRD 文档怎么写", category: "文档能力", platform: "B站", level: "入门", why: "实习和面试最常考，也是最能放进作品集的东西。" },
+      { title: "竞品分析实战", category: "分析能力", platform: "B站", level: "进阶", why: "面试高频题，也是训练产品思维最快的方式。" },
+      { title: "用户调研与访谈", category: "分析能力", platform: "B站", level: "入门", why: "PM 的起点，不会做调研就没法定义问题。" },
+      { title: "Axure 交互原型", category: "原型设计", platform: "B站", level: "进阶", why: "有些公司还在用 Axure，会了不亏。" },
+      { title: "数据分析与 SQL 入门", category: "数据能力", platform: "B站", level: "入门", why: "产品经理要能看懂数据，SQL 是加分项。" },
+      { title: "产品经理求职与面试", category: "求职准备", platform: "B站", level: "求职", why: "了解真实面试流程和高频问题。" },
+      { title: "AI 产品经理入门", category: "AI 能力", platform: "B站", level: "入门", why: "AI 方向岗位越来越多，早点了解有优势。" }
+    ]
+  },
+  "ai-pm": {
+    id: "ai-pm", name: "AI 产品经理", mark: "AI", tagline: "懂一点技术、能把 AI 能力变成产品的人",
+    summary: "AI 产品经理在普通产品经理的基础上，还要理解模型能力边界、Prompt、RAG 这些概念，知道什么能做什么做不了。面试会追问你对 AI 产品的判断力。",
+    skills: {
+      required: ["产品经理基本功", "Prompt 工程", "RAG 与知识库概念", "数据与评估意识", "AI 工具实操"],
+      bonus: ["Python 基础", "模型 API 调用", "Agent 工作流", "向量数据库"],
+      standards: [
+        "能说清楚一个 AI 产品和普通产品的区别，以及它的风险。",
+        "能设计一个简单的 RAG 方案，解释为什么要检索再回答。",
+        "能写出一段可用的 Prompt，并说明怎么评估效果好不好。"
+      ]
+    },
+    stages: [
+      { title: "第 1 周：补齐 AI 基础概念", duration: "约 1 周",
+        tasks: ["搞懂大模型、Prompt、Token、RAG 是什么意思", "上手用 AI 工具完成一个真实任务"],
+        deliverable: "一份《AI 概念笔记》加一个 AI 工具实操案例",
+        standard: "能用大白话给一个完全不懂的人讲清楚 RAG 是什么。",
+        resources: [{ name: "B站搜索：大模型入门", url: "https://search.bilibili.com/all?keyword=%E5%A4%A7%E6%A8%A1%E5%9E%8B%20%E5%85%A5%E9%97%A8" }] },
+      { title: "第 2 到 3 周：练 AI 产品技能", duration: "约 2 周",
+        tasks: ["调一次模型 API", "写并迭代一版 Prompt", "设计一个 RAG 知识库方案"],
+        deliverable: "一个能跑通的最小 AI 功能",
+        standard: "能解释你的 Prompt 为什么这么写，怎么判断输出质量。",
+        resources: [{ name: "B站搜索：Prompt 工程", url: "https://search.bilibili.com/all?keyword=Prompt%20%E5%B7%A5%E7%A8%8B" }] },
+      { title: "第 3 到 5 周：做一个 AI 产品项目", duration: "约 2 周",
+        tasks: ["选一个 AI 能真正解决的问题", "做出可演示的 demo", "写清楚 AI 部分的设计和评估"],
+        deliverable: "一个含 AI 功能的完整项目",
+        standard: "能讲清楚什么交给 AI、什么不能交给 AI，以及怎么控制幻觉。",
+        resources: [] }
+    ],
+    interviews: [
+      { q: "你怎么判断一个需求适不适合用 AI 做？", tags: ["高频", "判断力"], source: "大厂真题", cred: "high",
+        a: "看任务是不是重复、是不是有大量非结构化数据、容错率高不高。容错率低、要求百分百准确的场景要谨慎，AI 更适合做辅助而不是直接决策。" },
+      { q: "什么是 RAG，为什么要用它？", tags: ["高频", "概念题"], source: "牛客社区面经", cred: "high",
+        a: "RAG 是先从你的资料库里检索相关内容，再让模型基于这些内容回答。好处是降低幻觉、能用上最新和私有数据，比直接问模型更靠谱。" },
+      { q: "AI 产品怎么做效果评估？", tags: ["进阶"], source: "AI 整理", cred: "ai",
+        a: "分两层：离线用一批标准样本抽检准确率，线上看用户行为（采纳率、修改率、满意度）。关键是先定一个能衡量的标准，再谈优化。" }
+    ],
+    courses: [
+      { title: "大模型与 RAG 入门", category: "AI 能力", platform: "B站", level: "入门", why: "RAG 是 AI 产品面试最高频的概念。" },
+      { title: "Prompt 工程实战", category: "AI 能力", platform: "B站", level: "入门", why: "Prompt 是 AI 产品经理的日常工具。" },
+      { title: "大模型 API 调用实操", category: "技术基础", platform: "B站", level: "进阶", why: "自己动手调一次 API，理解会完全不一样。" }
+    ]
+  }
+};
+
+const INTERVIEW_BANK = [
+  { role: "产品经理", company: "字节跳动", year: "2025", type: "行为面试", q: "你怎么理解产品经理这个岗位？", tags: ["高频"], source: "牛客社区面经", cred: "high",
+    a: "分三层答：发现用户问题、定义产品方案、推动方案落地。最后结合你做过的一件事收尾。" },
+  { role: "产品经理", company: "腾讯", year: "2025", type: "案例分析", q: "挑一个你常用的 App，加一个功能你会怎么做？", tags: ["高频"], source: "大厂真题", cred: "high",
+    a: "先定位用户和场景，再找问题，再给方案，最后说怎么验证。别一上来就报功能名。" },
+  { role: "产品经理", company: "美团", year: "2024", type: "技能题", q: "竞品分析你会怎么做？", tags: ["高频"], source: "牛客社区面经", cred: "medium",
+    a: "先分类（直接/间接/替代），再定维度（定位、用户、功能、体验、商业模式），最后给结论。" },
+  { role: "产品经理", company: "阿里巴巴", year: "2025", type: "技能题", q: "你怎么判断一个需求该不该做？", tags: ["高频"], source: "大厂真题", cred: "high",
+    a: "看用户价值、业务价值、实现成本，再排优先级。可以说 RICE 或 KANO。" },
+  { role: "产品经理", company: "小红书", year: "2025", type: "项目追问", q: "讲一个你做过的项目，你在里面负责什么？", tags: ["必问"], source: "社区经验", cred: "medium",
+    a: "用背景、目标、你的动作、结果四步讲。重点说你的判断和取舍，而不是流程。" },
+  { role: "产品经理", company: "网易", year: "2024", type: "行为面试", q: "你和开发意见不一致时怎么处理？", tags: ["软技能"], source: "牛客社区面经", cred: "medium",
+    a: "先说共同目标，再摆数据和用户证据，最后给取舍方案。强调你是解决问题而不是争输赢。" },
+  { role: "产品经理", company: "百度", year: "2024", type: "概念题", q: "产品和运营的区别是什么？", tags: ["概念"], source: "社区经验", cred: "medium",
+    a: "产品侧重定义做什么和为什么，运营侧重让更多用户用起来。两者边界在很多公司是模糊的。" },
+  { role: "AI 产品经理", company: "字节跳动", year: "2025", type: "判断力", q: "你怎么判断一个需求适不适合用 AI 做？", tags: ["高频"], source: "大厂真题", cred: "high",
+    a: "看任务是不是重复、数据是不是非结构化、容错率高不高。容错低的场景要谨慎。" },
+  { role: "AI 产品经理", company: "腾讯", year: "2025", type: "概念题", q: "什么是 RAG，为什么要用它？", tags: ["高频"], source: "牛客社区面经", cred: "high",
+    a: "先检索相关资料，再让模型基于资料回答。好处是降低幻觉、能用最新和私有数据。" },
+  { role: "AI 产品经理", company: "阿里巴巴", year: "2025", type: "进阶", q: "AI 产品怎么评估效果？", tags: ["进阶"], source: "AI 整理", cred: "ai",
+    a: "离线抽检准确率，线上看采纳率、修改率、满意度。先定标准再优化。" }
+];
+
+const LIBRARY_CATEGORIES = ["全部", "原型设计", "文档能力", "分析能力", "数据能力", "AI 能力", "技术基础", "求职准备"];
+const TERM_CATEGORIES = ["全部", "产品概念", "技术概念", "流程术语", "数据指标", "求职术语"];
+const TERMS = [
+  { term: "PRD", category: "产品概念", definition: "产品需求文档，写清楚一个功能要做什么、为什么做、做成什么样。", example: "面试常问：你写过 PRD 吗？能给结构吗？", related: "用户故事,原型" },
+  { term: "MVP", category: "产品概念", definition: "最小可行产品，用最小的成本做出一个能验证核心想法的版本。", example: "先做一页能生成学习路径的页面，就是 MVP。", related: "迭代,验证" },
+  { term: "用户画像", category: "产品概念", definition: "根据真实调研抽象出来的典型用户形象，用来帮你判断需求该不该做。", example: "小陈：大三，想找产品实习，零经验。", related: "用户调研,Persona" },
+  { term: "竞品分析", category: "产品概念", definition: "研究同类产品，找出别人做对了什么、做错了什么，以及你能切入的地方。", example: "对比牛客网和面经类工具的功能差异。", related: "差异化,定位" },
+  { term: "用户旅程", category: "产品概念", definition: "用户从第一次接触到完成目标的完整过程，用来找中间的卡点。", example: "输入岗位到看到成长路径的这几步。", related: "漏斗,体验" },
+  { term: "大模型", category: "技术概念", definition: "用海量文本训练出来的模型，能理解和生成语言。", example: "DeepSeek、GPT 都属于大模型。", related: "LLM,Token" },
+  { term: "Prompt", category: "技术概念", definition: "你给大模型的指令。写得越清楚，输出越稳定。", example: "让 AI 输出 JSON 格式，就是 Prompt 里的一条约束。", related: "提示词,系统提示" },
+  { term: "Token", category: "技术概念", definition: "模型处理文字的最小单位，长度限制和计费都按它算。", example: "一段 1000 字的回答，大概会消耗上千个 Token。", related: "上下文,成本" },
+  { term: "RAG", category: "技术概念", definition: "检索增强生成。先从资料库里找出相关内容，再让模型基于这些内容回答，能明显减少胡说。", example: "先检索真实面经，再让 AI 总结考点。", related: "检索,向量数据库" },
+  { term: "向量数据库", category: "技术概念", definition: "存文本向量、支持按语义相似度查找的数据库。RAG 常用它来检索。", example: "用户问面试问题，先从库里找最接近的几条。", related: "Embedding,RAG" },
+  { term: "Embedding", category: "技术概念", definition: "把一段文字变成一串数字向量，用来表示它的意思。", example: "意思相近的两句话，向量距离会很近。", related: "向量数据库,语义检索" },
+  { term: "Fine-tuning", category: "技术概念", definition: "用你自己的数据继续训练模型，让它更贴合某个具体任务。", example: "想让它专门输出产品面试题风格，可以微调。", related: "训练,大模型" },
+  { term: "Agent", category: "技术概念", definition: "能自己拆任务、调用工具、多步执行的 AI 程序。", example: "自动抓面经、清洗、入库、再总结，就是一个 Agent 流程。", related: "工作流,工具调用" },
+  { term: "需求评审会", category: "流程术语", definition: "产品把需求讲给研发、测试和设计，大家确认要不要做、怎么做。", example: "很多经验帖不会提这个，但它是 PM 的日常。", related: "需求,协作" },
+  { term: "发版", category: "流程术语", definition: "把新版本发布到线上，让用户用上。", example: "版本上线前要做回归测试。", related: "上线,灰度发布" },
+  { term: "灰度发布", category: "流程术语", definition: "先让一小部分用户用新版本，确认没问题再全量。", example: "先放 5% 用户，观察两天再全开。", related: "发版,回滚" },
+  { term: "埋点", category: "流程术语", definition: "在用户行为上记录数据，用来分析大家是怎么用产品的。", example: "记录有多少人点了保存按钮。", related: "数据,指标" },
+  { term: "需求池", category: "流程术语", definition: "收集和存放所有待评估需求的地方，避免漏掉也避免什么都做。", example: "把用户反馈先丢进需求池，再排优先级。", related: "优先级,排期" },
+  { term: "北极星指标", category: "数据指标", definition: "最能代表产品价值的那个核心指标，全团队都盯它。", example: "本产品的北极星可以是每周生成并保存路径的人数。", related: "KPI,指标" },
+  { term: "DAU / MAU", category: "数据指标", definition: "日活用户数和月活用户数，衡量产品有多少人在用。", example: "DAU 高说明用户回访频繁。", related: "留存,活跃" },
+  { term: "留存率", category: "数据指标", definition: "用过的用户里，过一段时间还会回来的比例。", example: "第二天回访比例就是次日留存。", related: "回访,活跃" },
+  { term: "转化率", category: "数据指标", definition: "走完某个流程的人，占进入流程总人数的比例。", example: "输入岗位的人里，有多少真的看到了路径。", related: "漏斗,注册" },
+  { term: "漏斗", category: "数据指标", definition: "把用户从进入到完成目标拆成几步，看每一步流失了多少人。", example: "访问到注册到保存，就是一条漏斗。", related: "转化率,流失" },
+  { term: "A/B 测试", category: "数据指标", definition: "把用户分成两组用不同方案，对比哪个效果更好。", example: "面经免费 1 条和免费 3 条，哪个注册率高。", related: "实验,转化率" },
+  { term: "八股文", category: "求职术语", definition: "面试里反复出现、需要提前背下来的标准答案。", example: "产品和运营的区别，就属于常见八股。", related: "面经,面试" },
+  { term: "面经", category: "求职术语", definition: "别人分享的真实面试题目和面试过程。", example: "牛客上有很多产品经理面经。", related: "题库,八股文" },
+  { term: "JD", category: "求职术语", definition: "职位描述，招聘方写的岗位职责和任职要求。", example: "看 JD 能反推这个岗位要会什么。", related: "岗位要求,简历" },
+  { term: "内推", category: "求职术语", definition: "通过公司内部员工推荐来投递，简历通常更容易被看到。", example: "找学长学姐内推，比自己投效率高。", related: "投递,简历" },
+  { term: "转正", category: "求职术语", definition: "实习结束后留在公司，成为正式员工。", example: "实习期表现好，有机会拿到转正名额。", related: "实习,offer" }
+];
+const BACKGROUND = ["本科大三", "大四 / 应届", "零产品经验", "会一点 Python", "做过课程项目", "想转行"];
+const BACKGROUND_MORE = ["跨专业求职", "海外留学生", "工作后转行", "想换赛道"];
+const LOADING_STEPS = ["正在读取目标岗位的要求", "正在整理真实面经和高频考点", "正在匹配适合你的教程", "正在生成分阶段学习路径"];
+const NAV = [
+  { id: "home", label: "首页" },
+  { id: "plans", label: "我的计划" },
+  { id: "library", label: "资料库" },
+  { id: "interview", label: "面经题库" },
+  { id: "knowledge", label: "知识库" }
+];
+const SUBTABS = [
+  { id: "skills", label: "岗位要求" },
+  { id: "path", label: "学习路径" },
+  { id: "interview", label: "基本面经" },
+  { id: "course", label: "课程推荐" }
+];
+const STORE_KEY = "jobcompass.plans";
+const FREE_INTERVIEW_IN_RESULT = 1;
+const FREE_INTERVIEW_IN_BANK = 3;
+
+const state = {
+  page: "home", sub: "skills", roleId: "pm", keyword: "", picked: ["大四 / 应届", "零产品经验"],
+  moreBg: false, done: {}, open: null, loading: false, loadIdx: 0, plans: [],
+  loggedIn: false, pro: false, modal: null,
+  bankRole: "全部", bankCompany: "全部", bankYear: "全部",
+  libCat: "全部", termCat: "全部", termQuery: "", sourceKind: "", focusTerm: false
+};
+
+const app = document.getElementById("app");
+const navLinks = document.getElementById("navLinks");
+const navRight = document.getElementById("navRight");
+const modalRoot = document.getElementById("modalRoot");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const role = () => ROLES[state.roleId];
+let apiCourses = null;
+const allCourses = () => {
+  if (apiCourses) return apiCourses;
+  const seen = {};
+  Object.values(ROLES).forEach(r => r.courses.forEach(c => { seen[c.title] = c; }));
+  return Object.values(seen);
+};
+const totalTasks = () => role().stages.reduce((n, s) => n + s.tasks.length, 0);
+const doneCount = () => Object.values(state.done).filter(Boolean).length;
+const progress = () => { const t = totalTasks(); return t ? Math.round((doneCount() / t) * 100) : 0; };
+
+function loadPlans() { try { state.plans = JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); } catch (e) { state.plans = []; } }
+function persistPlans() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state.plans)); } catch (e) {} }
+
+function renderNav() {
+  navLinks.innerHTML = NAV.map(n =>
+    `<button class="nav-link ${state.page === n.id ? "on" : ""}" data-page="${n.id}">${esc(n.label)}</button>`).join("");
+  navLinks.querySelectorAll("[data-page]").forEach(el => el.onclick = () => go(el.dataset.page));
+
+  if (state.loggedIn) {
+    navRight.innerHTML = `${state.pro ? '<span class="member-pill">会员</span>' : ''}<button class="btn-primary sm" id="navNew">生成新路径</button>`;
+    const b = document.getElementById("navNew"); if (b) b.onclick = () => go("home");
+  } else {
+    navRight.innerHTML = `<button class="btn-ghost" id="navLogin">登录</button><button class="btn-primary sm" id="navNew">生成新路径</button>`;
+    const l = document.getElementById("navLogin"); if (l) l.onclick = () => openModal("login");
+    const b = document.getElementById("navNew"); if (b) b.onclick = () => go("home");
+  }
+}
+
+function render() {
+  renderNav();
+  if (state.loading) app.innerHTML = viewLoading();
+  else if (state.page === "home") app.innerHTML = viewHome();
+  else if (state.page === "path") app.innerHTML = viewPath();
+  else if (state.page === "plans") app.innerHTML = viewPlans();
+  else if (state.page === "library") app.innerHTML = viewLibrary();
+  else if (state.page === "knowledge") app.innerHTML = viewKnowledge();
+  else app.innerHTML = viewBank();
+  bind();
+  renderModal();
+}
+
+function viewHome() {
+  const roleChips = Object.values(ROLES).map(r =>
+    `<button class="chip outline ${state.roleId === r.id ? "on" : ""}" data-role="${r.id}">${esc(r.name)}</button>`).join("");
+  const all = state.moreBg ? BACKGROUND.concat(BACKGROUND_MORE) : BACKGROUND;
+  const bgChips = all.map(b =>
+    `<button class="chip ${state.picked.includes(b) ? "on" : ""}" data-bg="${esc(b)}">${esc(b)}</button>`).join("");
+  return `
+  <section class="hero">
+    <div class="eyebrow">AI 求职成长路径</div>
+    <h1>输入一个岗位<br/><span class="hl">给你一条能走的路</span></h1>
+    <p class="sub">不用再自己拼各种零散经验帖。告诉它你想做什么，它会给你岗位要求、分阶段学习路径、真实面经和教程。</p>
+  </section>
+  <section class="card mt24">
+    <label class="field">我想找的岗位</label>
+    <div class="row">
+      <input class="text" id="kw" placeholder="比如：产品经理、AI 产品经理" value="${esc(state.keyword)}" />
+      <button class="btn-primary" id="gen">生成我的成长路径</button>
+    </div>
+    <p class="label-mini" style="margin-top:22px;">热门岗位</p>
+    <div class="chips" style="margin-top:8px;">${roleChips}</div>
+    <div class="label-row">
+      <span class="label-mini">你是哪种情况（可多选）</span>
+      <button class="more-link" id="moreBg">${state.moreBg ? "收起" : "更多"}</button>
+    </div>
+    <div class="chips">${bgChips}</div>
+  </section>
+  <section class="grid3 mt24">
+    <div class="feature"><div class="num">01</div><h3>岗位要求拆解</h3><p>把 JD 拆成必会技能和加分技能，告诉你学到什么程度算达标。</p></div>
+    <div class="feature"><div class="num">02</div><h3>分阶段学习路径</h3><p>每个阶段有任务、交付物和验收标准，不再只给你一个名词列表。</p></div>
+    <div class="feature"><div class="num">03</div><h3>真实面经题库</h3><p>题目标注来源和可信度，区分真题、社区经验和 AI 整理。</p></div>
+  </section>
+  ${banner()}`;
+}
+
+function banner() {
+  return `<section class="banner"><div><h3>组队打卡学习</h3><p>找搭子一起学：同岗位的人组队打卡、互相监督、共享面经。</p></div><span class="tag">即将上线</span></section>`;
+}
+
+function viewLoading() {
+  const r = role();
+  const pct = Math.round(((state.loadIdx + 1) / LOADING_STEPS.length) * 100);
+  const steps = LOADING_STEPS.map((s, i) =>
+    `<li class="${i <= state.loadIdx ? "on" : ""}"><span class="dot">${i < state.loadIdx ? "✓" : i + 1}</span>${esc(s)}</li>`).join("");
+  return `
+  <section class="card loading">
+    <span class="mark">${esc(r.mark)}</span>
+    <h2 style="margin:16px 0 6px;font-size:17px;">正在为你生成「${esc(r.name)}」的成长路径</h2>
+    <p style="margin:0;font-size:12px;color:#A3A3A3;">通常需要 10 秒左右，请稍等。</p>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <ul class="steps">${steps}</ul>
+  </section>`;
+}
+
+function viewPath() {
+  const r = role();
+  const saved = state.plans.some(p => p.roleId === r.id);
+  return `
+  <section class="card">
+    <div class="rhead">
+      <div class="role">
+        <span class="avatar">${esc(r.mark)}</span>
+        <div><h2>${esc(r.name)} 成长路径</h2><span class="tl">${esc(r.tagline)}</span></div>
+      </div>
+      <div class="chips">
+        ${state.sourceKind === "ai" || state.sourceKind === "cache" ? '<span class="member-pill">AI 生成</span>' : ""}
+        <button class="btn-ghost" id="restart">换个岗位</button>
+      </div>
+    </div>
+    <p class="summary">${esc(r.summary)}</p>
+    <div class="stats">
+      <div class="stat"><b>${r.stages.length}</b><span>学习阶段</span></div>
+      <div class="stat"><b>${r.interviews.length}</b><span>面经题</span></div>
+      <div class="stat accent"><b>${progress()}%</b><span>路径完成度</span></div>
+    </div>
+    <div class="actionbar">
+      <p>${saved ? "这条路径已经保存在「我的计划」里，可以随时回来接着走。" : "保存后可以在「我的计划」里随时查看，也能接着打勾。"}</p>
+      <button class="${saved ? "btn-ghost" : "btn-primary"}" id="savePlan">${saved ? "已保存 · 查看我的计划" : (state.loggedIn ? "保存我的成长路径" : "登录并保存这条路径")}</button>
+    </div>
+  </section>
+  <div class="subtabs">
+    ${SUBTABS.map(t => `<button class="subtab ${state.sub === t.id ? "on" : ""}" data-sub="${t.id}">${esc(t.label)}</button>`).join("")}
+  </div>
+  <div class="panel">${panelPath()}</div>
+  ${banner()}`;
+}
+
+function panelPath() {
+  const r = role();
+  if (state.sub === "skills") {
+    const req = r.skills.required.map(s => `<span class="tag-chip solid">${esc(s)}</span>`).join("");
+    const bon = r.skills.bonus.map(s => `<span class="tag-chip n">${esc(s)}</span>`).join("");
+    const std = r.skills.standards.map(s => `<li><span class="ok">✓</span><span>${esc(s)}</span></li>`).join("");
+    return `<div class="box"><h3>必会技能</h3><div>${req}</div><h3 style="margin-top:20px;">加分技能</h3><div>${bon}</div></div>
+      <div class="box"><h3>学到什么程度算达标</h3><ul class="std">${std}</ul></div>`;
+  }
+  if (state.sub === "path") {
+    const head = `<div class="box"><div class="progress-head"><b>我的进度</b><span>已完成 ${doneCount()} / ${totalTasks()}</span></div>
+      <div class="bar dark" style="margin-top:14px;"><i style="width:${progress()}%"></i></div></div>`;
+    const stages = r.stages.map((s, si) => {
+      const tasks = s.tasks.map((task, ti) => {
+        const key = si + "-" + ti; const on = !!state.done[key];
+        return `<li><button class="task ${on ? "on" : ""}" data-task="${key}"><span class="cb">✓</span><span class="t">${esc(task)}</span></button></li>`;
+      }).join("");
+      const links = s.resources.length ? `<div class="res-links">${s.resources.map(x => `<a href="${x.url}" target="_blank" rel="noreferrer">${esc(x.name)}</a>`).join("")}</div>` : "";
+      return `<div class="stage"><div class="shead"><span class="num">${si + 1}</span><div><h3>${esc(s.title)}</h3><p>${esc(s.duration)}</p></div></div>
+        <ul class="tasks">${tasks}</ul>
+        <div class="duo"><div class="cell"><p class="label">交付物</p><p class="val">${esc(s.deliverable)}</p></div>
+        <div class="cell accent"><p class="label">验收标准</p><p class="val">${esc(s.standard)}</p></div></div>${links}</div>`;
+    }).join("");
+    return head + stages;
+  }
+  if (state.sub === "interview") {
+    const credLabel = { high: "已核实真题", medium: "社区经验", ai: "AI 整理" };
+    const free = r.interviews.slice(0, FREE_INTERVIEW_IN_RESULT);
+    const locked = r.interviews.slice(FREE_INTERVIEW_IN_RESULT);
+    const freeHtml = free.map(it => qCard(it, credLabel)).join("");
+    if (!locked.length || state.pro) {
+      return freeHtml + locked.map(it => qCard(it, credLabel)).join("");
+    }
+    return freeHtml + `
+      <div class="locked-wrap">
+        <div class="locked-blur">${locked.map(it => qCard(it, credLabel)).join("")}</div>
+        <div class="lock-badge"><div class="lock-inner">
+          <div class="lk">${ICON.lock}</div>
+          <h4>还有 ${locked.length} 道高频面经</h4>
+          <p>订阅后解锁全部面经、标准答题思路和来源链接。</p>
+          <button class="btn-lock" data-subscribe="1">解锁全部面经</button>
+        </div></div>
+      </div>
+      <p class="note">先给你看一条感受一下。产品经理面试高频题一共整理了几百道，都在「面经题库」里，可以按公司、年份筛选。</p>`;
+  }
+  return r.courses.map(c => courseCard(c)).join("");
+}
+
+function qCard(it, credLabel) {
+  const open = state.open === it.q;
+  const tags = it.tags.map(t => `<span class="tag-chip n" style="margin:0;">${esc(t)}</span>`).join("");
+  return `<div class="q">
+    <div class="meta"><span class="cred ${it.cred}">${credLabel[it.cred]}</span>${tags}<span class="src">来源：${esc(it.source)}</span></div>
+    <h3>${esc(it.q)}</h3>
+    <button class="toggle" data-open="${esc(it.q)}">${open ? "收起答题思路 ↑" : "看答题思路 ↓"}</button>
+    ${open ? `<p class="answer">${esc(it.a)}</p>` : ""}
+  </div>`;
+}
+
+function courseCard(c) {
+  return `<a class="course" href="https://search.bilibili.com/all?keyword=${encodeURIComponent(c.title)}" target="_blank" rel="noreferrer">
+    <div class="chead"><h3>${esc(c.title)}</h3><span class="plat">${esc(c.platform)}</span></div>
+    <p>${esc(c.why)}</p>
+    <div class="lvl">难度：${esc(c.level)}${c.category ? " · " + esc(c.category) : ""}</div>
+  </a>`;
+}
+
+function viewPlans() {
+  if (!state.plans.length) {
+    return `<div class="card empty"><h3>还没有保存的成长路径</h3>
+      <p>${state.loggedIn ? "生成一条成长路径后，点保存，之后就能在这里接着看。" : "登录后就能把生成的成长路径保存下来，随时回来看。"}</p>
+      <button class="btn-primary" id="goHome">去生成一条</button></div>`;
+  }
+  return `<div class="panel">` + state.plans.map((p, i) => `
+    <div class="box"><div class="saved-item">
+      <div class="si-left"><span class="si-avatar">${ROLES[p.roleId] ? esc(ROLES[p.roleId].mark) : "JC"}</span>
+        <div><h3>${esc(p.roleName)} 成长路径</h3><p>保存于 ${esc(p.date)} · 进度 ${p.progress}%</p></div></div>
+      <div class="chips"><button class="btn-ghost" data-open-plan="${i}">继续学习</button>
+      <button class="btn-ghost" data-del-plan="${i}">删除</button></div>
+    </div></div>`).join("") + `</div>`;
+}
+
+function viewLibrary() {
+  const list = allCourses().filter(c => state.libCat === "全部" || c.category === state.libCat);
+  return `
+  <div class="filters">
+    <span class="lbl">按技能筛选</span>
+    ${LIBRARY_CATEGORIES.map(c => `<button class="chip ${state.libCat === c ? "on" : ""}" data-lib="${esc(c)}">${esc(c)}</button>`).join("")}
+  </div>
+  <div class="panel" style="margin-top:16px;">
+    ${list.length ? list.map(c => courseCard(c)).join("") : `<div class="box"><p style="margin:0;font-size:13px;color:#737373;">这个分类下暂时还没有资料。</p></div>`}
+  </div>`;
+}
+
+function viewKnowledge() {
+  const q = state.termQuery.trim().toLowerCase();
+  const list = TERMS.filter(t =>
+    (state.termCat === "全部" || t.category === state.termCat) &&
+    (!q || (t.term + t.definition).toLowerCase().indexOf(q) > -1)
+  );
+  return `
+  <div class="filters">
+    <input class="text" id="termSearch" placeholder="搜术语，比如 RAG、留存率" value="${esc(state.termQuery)}" style="max-width:250px;" />
+    <span class="lbl">分类</span>
+    ${TERM_CATEGORIES.map(c => `<button class="chip ${state.termCat === c ? "on" : ""}" data-term-cat="${esc(c)}">${esc(c)}</button>`).join("")}
+    <span class="lbl" style="margin-left:auto;">共 ${list.length} 条</span>
+  </div>
+  <div class="panel" style="margin-top:16px;">
+    ${list.length
+      ? list.map(termCard).join("")
+      : `<div class="box"><p style="margin:0;font-size:13px;color:#737373;">没找到这个术语，换个词试试。</p></div>`}
+  </div>`;
+}
+
+function termCard(t) {
+  const related = (t.related || "").split(",").map(s => s.trim()).filter(Boolean);
+  return `<div class="box">
+    <div class="term-head">
+      <h3>${esc(t.term)}</h3>
+      <span class="tag-chip n" style="margin:0;">${esc(t.category)}</span>
+    </div>
+    <p class="term-def">${esc(t.definition)}</p>
+    ${t.example ? `<p class="term-eg">例子：${esc(t.example)}</p>` : ""}
+    ${related.length ? `<div class="term-related">${related.map(r => `<span class="tag-chip n" style="margin:0;">${esc(r)}</span>`).join("")}</div>` : ""}
+  </div>`;
+}
+
+function viewBank() {
+  const roles = ["全部"].concat(Object.values(ROLES).map(r => r.name));
+  const companies = ["全部"].concat(Array.from(new Set(INTERVIEW_BANK.map(x => x.company))));
+  const years = ["全部"].concat(Array.from(new Set(INTERVIEW_BANK.map(x => x.year))).sort().reverse());
+  const list = INTERVIEW_BANK.filter(x =>
+    (state.bankRole === "全部" || x.role === state.bankRole) &&
+    (state.bankCompany === "全部" || x.company === state.bankCompany) &&
+    (state.bankYear === "全部" || x.year === state.bankYear)
+  );
+  const credLabel = { high: "已核实真题", medium: "社区经验", ai: "AI 整理" };
+  const freeLimit = state.pro ? list.length : FREE_INTERVIEW_IN_BANK;
+  const freeList = list.slice(0, freeLimit);
+  const lockedList = list.slice(freeLimit);
+  const opt = (arr, cur) => arr.map(v => `<option ${cur === v ? "selected" : ""}>${esc(v)}</option>`).join("");
+  return `
+  <div class="filters">
+    <span class="lbl">岗位</span><select class="sel" id="fRole">${opt(roles, state.bankRole)}</select>
+    <span class="lbl">公司</span><select class="sel" id="fCompany">${opt(companies, state.bankCompany)}</select>
+    <span class="lbl">年份</span><select class="sel" id="fYear">${opt(years, state.bankYear)}</select>
+    <span class="lbl" style="margin-left:auto;">共 ${list.length} 道</span>
+  </div>
+  <div class="panel" style="margin-top:16px;">
+    ${freeList.map(it => qCard(it, credLabel)).join("")}
+    ${lockedList.length ? `
+      <div class="locked-wrap">
+        <div class="locked-blur">${lockedList.slice(0, 3).map(it => qCard(it, credLabel)).join("")}</div>
+        <div class="lock-badge"><div class="lock-inner">
+          <div class="lk">${ICON.lock}</div>
+          <h4>还有 ${lockedList.length} 道面经</h4>
+          <p>订阅后解锁全部面经和答题思路，可按公司、年份、题型筛选。</p>
+          <button class="btn-lock" data-subscribe="1">解锁全部面经</button>
+        </div></div>
+      </div>` : ""}
+    ${!list.length ? `<div class="box"><p style="margin:0;font-size:13px;color:#737373;">这个筛选条件下暂时没有面经，换个条件试试。</p></div>` : ""}
+  </div>`;
+}
+
+function go(page) { state.page = page; state.open = null; window.scrollTo({ top: 0, behavior: "smooth" }); render(); }
+function goSub(sub) { state.sub = sub; state.open = null; render(); }
+
+function savePlan() {
+  if (!state.loggedIn) { openModal("login"); return; }
+  if (state.plans.some(p => p.roleId === state.roleId)) { go("plans"); return; }
+  const r = role(); const now = new Date();
+  const date = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+  state.plans.unshift({ roleId: r.id, roleName: r.name, date, progress: progress(), done: state.done });
+  persistPlans(); go("plans");
+}
+
+let loadTimer = null;
+
+async function generate(keyword) {
+  const name = (keyword || "").trim();
+  state.keyword = name;
+  state.loading = true;
+  state.loadIdx = 0;
+  render();
+
+  clearInterval(loadTimer);
+  loadTimer = setInterval(() => {
+    if (state.loadIdx < LOADING_STEPS.length - 1) {
+      state.loadIdx += 1;
+      render();
+    }
+  }, 620);
+
+  let roleData = null;
+  let sourceKind = "seed";
+  let note = "";
+
+  // 通过后端打开时，请后端真的生成一次；直接双击文件打开时用页面自带的数据
+  if (location.protocol !== "file:" && name) {
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_name: name, background: state.picked }),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        roleData = result.data;
+        sourceKind = result.source;
+        note = result.note || "";
+      }
+    } catch (error) {
+      console.warn("生成接口没连上，先用页面自带的数据", error);
+    }
+  }
+
+  // 让加载动画至少走一会儿，避免一闪而过
+  const waited = (state.loadIdx + 1) * 620;
+  await new Promise(resolve => setTimeout(resolve, Math.max(0, 2400 - waited)));
+  clearInterval(loadTimer);
+
+  if (roleData) {
+    ROLES[roleData.id] = adaptRole(roleData);
+    state.roleId = roleData.id;
+  } else if (/ai|人工智能/i.test(name)) {
+    state.roleId = "ai-pm";
+  }
+  if (note) console.info("[JobCompass] " + note);
+
+  state.done = {};
+  state.loading = false;
+  state.page = "path";
+  state.sub = "skills";
+  state.sourceKind = sourceKind;
+  render();
+}
+
+function openModal(kind) { state.modal = kind; renderModal(); }
+function closeModal() { state.modal = null; renderModal(); }
+
+function renderModal() {
+  if (!state.modal) { modalRoot.innerHTML = ""; return; }
+  const isLogin = state.modal === "login";
+  modalRoot.innerHTML = `
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h3>${isLogin ? "登录后保存你的成长路径" : "解锁全部面经"}</h3>
+      <p>${isLogin
+        ? "登录后可以把这条路径保存下来，随时回来接着打勾，还能在「我的计划」里管理。"
+        : "订阅后可查看全部面经、标准答题思路和来源链接，并支持按公司、年份筛选。"}</p>
+      <button class="btn-primary" id="modalConfirm">${isLogin ? "微信 / 手机号登录" : "开通会员"}</button>
+      <button class="cancel" id="modalCancel">以后再说</button>
+    </div>
+  </div>`;
+  document.getElementById("overlay").onclick = (e) => { if (e.target.id === "overlay") closeModal(); };
+  document.getElementById("modalCancel").onclick = closeModal;
+  document.getElementById("modalConfirm").onclick = () => {
+    if (isLogin) { state.loggedIn = true; closeModal(); render(); }
+    else { state.pro = true; state.loggedIn = true; closeModal(); render(); }
+  };
+}
+
+function bind() {
+  const gen = document.getElementById("gen");
+  if (gen) gen.onclick = () => generate(document.getElementById("kw").value);
+  const more = document.getElementById("moreBg");
+  if (more) more.onclick = () => { state.moreBg = !state.moreBg; render(); };
+  const goHome = document.getElementById("goHome");
+  if (goHome) goHome.onclick = () => go("home");
+  app.querySelectorAll("[data-role]").forEach(el => el.onclick = () => { state.roleId = el.dataset.role; render(); });
+  app.querySelectorAll("[data-bg]").forEach(el => el.onclick = () => {
+    const v = el.dataset.bg;
+    state.picked = state.picked.includes(v) ? state.picked.filter(x => x !== v) : state.picked.concat(v);
+    render();
+  });
+  const restart = document.getElementById("restart");
+  if (restart) restart.onclick = () => { state.done = {}; go("home"); };
+  const save = document.getElementById("savePlan");
+  if (save) save.onclick = savePlan;
+  app.querySelectorAll("[data-sub]").forEach(el => el.onclick = () => goSub(el.dataset.sub));
+  app.querySelectorAll("[data-task]").forEach(el => el.onclick = () => { const k = el.dataset.task; state.done[k] = !state.done[k]; render(); });
+  app.querySelectorAll("[data-open]").forEach(el => el.onclick = () => { const q = el.dataset.open; state.open = state.open === q ? null : q; render(); });
+  app.querySelectorAll("[data-open-plan]").forEach(el => el.onclick = () => {
+    const p = state.plans[Number(el.dataset.openPlan)]; if (!p) return;
+    state.roleId = p.roleId; state.done = p.done || {}; state.loggedIn = true; go("path");
+  });
+  app.querySelectorAll("[data-del-plan]").forEach(el => el.onclick = () => { state.plans.splice(Number(el.dataset.delPlan), 1); persistPlans(); render(); });
+  app.querySelectorAll("[data-subscribe]").forEach(el => el.onclick = () => openModal("subscribe"));
+  app.querySelectorAll("[data-lib]").forEach(el => el.onclick = () => { state.libCat = el.dataset.lib; render(); });
+  app.querySelectorAll("[data-term-cat]").forEach(el => el.onclick = () => { state.termCat = el.dataset.termCat; render(); });
+  const termSearch = document.getElementById("termSearch");
+  if (termSearch) {
+    termSearch.oninput = () => { state.termQuery = termSearch.value; state.focusTerm = true; render(); };
+    if (state.focusTerm) {
+      termSearch.focus();
+      termSearch.setSelectionRange(termSearch.value.length, termSearch.value.length);
+      state.focusTerm = false;
+    }
+  }
+  const fRole = document.getElementById("fRole"); if (fRole) fRole.onchange = () => { state.bankRole = fRole.value; render(); };
+  const fCompany = document.getElementById("fCompany"); if (fCompany) fCompany.onchange = () => { state.bankCompany = fCompany.value; render(); };
+  const fYear = document.getElementById("fYear"); if (fYear) fYear.onchange = () => { state.bankYear = fYear.value; render(); };
+}
+
+// 演示用：#path / #plans / #library / #interview / #path-interview 可直接打开
+function applyHash() {
+  const h = location.hash.replace("#", "");
+  if (h.indexOf("path") === 0) {
+    state.page = "path";
+    if (h.indexOf("interview") > -1) state.sub = "interview";
+    else if (h.indexOf("course") > -1) state.sub = "course";
+    else if (h.indexOf("roadmap") > -1) state.sub = "path";
+    else state.sub = "skills";
+  }
+  else if (["plans", "library", "interview", "knowledge", "home"].indexOf(h) > -1) state.page = h;
+}
+
+function adaptInterview(i) {
+  return { q: i.question, tags: String(i.tags || "").split(",").filter(Boolean), source: i.source, cred: i.credibility, a: i.answer };
+}
+
+function adaptCourse(c) {
+  return { title: c.title, category: c.category, platform: c.platform, level: c.level, why: c.reason, url: c.url };
+}
+
+function adaptRole(r) {
+  return {
+    id: r.id,
+    name: r.name,
+    mark: r.mark,
+    tagline: r.tagline,
+    summary: r.summary,
+    skills: r.skills,
+    stages: (r.stages || []).map(s => ({
+      title: s.title, duration: s.duration, tasks: s.tasks,
+      deliverable: s.deliverable, standard: s.standard, resources: s.resources,
+    })),
+    interviews: (r.interviews || []).map(adaptInterview),
+    courses: (r.courses || []).map(adaptCourse),
+  };
+}
+
+// 通过后端打开时，用接口里的真实数据；直接双击文件打开时，用页面自带的数据。
+async function bootstrap() {
+  if (location.protocol === "file:") { render(); return; }
+  try {
+    const response = await fetch("/api/bootstrap");
+    if (!response.ok) throw new Error("接口返回 " + response.status);
+    const data = await response.json();
+
+    Object.keys(ROLES).forEach(key => delete ROLES[key]);
+    Object.values(data.roles || {}).forEach(r => { ROLES[r.id] = adaptRole(r); });
+
+    if (data.interviews) {
+      INTERVIEW_BANK.length = 0;
+      data.interviews.forEach(i => INTERVIEW_BANK.push(adaptInterview(i)));
+    }
+    if (data.courses) apiCourses = data.courses.map(adaptCourse);
+    if (data.libraryCategories) {
+      LIBRARY_CATEGORIES.length = 0;
+      data.libraryCategories.forEach(c => LIBRARY_CATEGORIES.push(c));
+    }
+    if (data.terms) {
+      TERMS.length = 0;
+      data.terms.forEach(t => TERMS.push(t));
+    }
+    if (data.termCategories) {
+      TERM_CATEGORIES.length = 0;
+      data.termCategories.forEach(c => TERM_CATEGORIES.push(c));
+    }
+  } catch (error) {
+    console.warn("接口没连上，先用页面自带的数据", error);
+  }
+  render();
+}
+
+loadPlans();
+applyHash();
+bootstrap();
+</script>
+</body>
+</html>
